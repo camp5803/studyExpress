@@ -1,3 +1,4 @@
 # npm module files
 node_modules
 package-lock.json
+socket.io

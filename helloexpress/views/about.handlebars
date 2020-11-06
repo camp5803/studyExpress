@@ -1,6 +1,20 @@
-<h1>귀요미동언이</h1>
+<h1>당신의 고양이 테스트</h1>
 
 <p>
-    test:
+    <h2>당신의 고양이는?:</h2>
 </p>
-<blockquote>{{ssipjot}}</blockquote>
+<script src = '../../lib/ssipjot.js'></script>
+<script>
+    const jjotimg = document.getElementById('jjotimg');
+
+    let JJOT = ssipjot.randomString();
+    document.write(JJOT);
+
+    if(JJOT == "씹쫏") {
+        jjotimg = "<img src = "/img/logo.jpg", id = "jjotimg">";
+    } else if (JJOT == "딩고푸") {
+        jjotimg = "<img src = "/img/logo_dingopu.jpg", id = "jjotimg">";
+    } else {
+        jjotimg = "<img src = "/img/logo_ddung.jpg", id = "jjotimg">";
+    }
+</script>
