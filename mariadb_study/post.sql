@@ -30,4 +30,4 @@ ENGINE = InnoDB;
 // comment_id는 어떻게 해야 할 것인가
 // NEED PERMIT
 // Writer, Admin, User
-// id는 back-end에서 받아올 것
+// id는 back-end에서 받아올 것 -> 해결
