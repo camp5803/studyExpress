@@ -7,8 +7,8 @@ async function GetUserList(){
     let conn, rows;
     try{
         conn = await pool.getConnection();
-        await conn.query('USE node_account;')
-        rows = await conn.query("select * from user_basic where id=1;");
+        //await conn.query('USE node_account;')
+        rows = await conn.query("insert into user_option value(1,1,1,1,1,1,1);");
     }
     catch(err){
         throw err;
