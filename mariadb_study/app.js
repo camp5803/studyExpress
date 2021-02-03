@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-//const dbConn = require('./lib/mariadb');
+const connDB = require('./lib/mariadb');
+const fs = require('fs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -46,6 +47,21 @@ app.get('/post/timetable', (req, res) => {
 
 app.get('/armycalc', (req, res) => {
 
+});
+
+// test page for crud
+app.get('/test', (req, res) => {
+    fs.readFile('views/test.ejs', 'utf8', (err, data) => {
+        try {
+            connDB.query('SELECT * FROM user_basic;', (results) => { //connDB.query err
+                res.send(ejs.render(data, {
+                    data: results
+                }));
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    });
 });
 
 app.get('*', (req, res) => {

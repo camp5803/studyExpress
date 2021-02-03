@@ -1,39 +1,29 @@
 const mariadb = require('mariadb');
 const config = require('./secret/login.json');
 
-let pool = mariadb.createPool(config);
+const pool = mariadb.createPool(config);
+const client = mariadb.createConnection(config);
 
-async function GetUserList(){
-    let conn, rows;
-    try{
-        conn = await pool.getConnection();
-        //await conn.query('USE node_account;')
-        rows = await conn.query("insert into user_option value(1,1,1,1,1,1,1);");
-    }
-    catch(err){
-        throw err;
-    }
-    finally{
-        if (conn) conn.end();
-        return rows[0];
-    }
+const poolConnect = () => {
+    const conn = pool.getConnection();
+    return conn;
 }
 
-/* pool.getConnection((err, conn) => {
-    if(!err){
-        conn.query();
-    }
-    conn.release();
-}); */
+const handleConnection = async (data) => {
+    /*
+    about handler...?
+    */
+}
 
-GetUserList()
-    .then((rows) => {
-        console.log(rows);
-    })
-    .catch((errMsg) => {
-        console.log(errMsg);
-    });
+const poolQuery = async (data) => {
+    let poolConnection = await poolConnect();
+    console.log(await poolConnection.query('DESC user_basic'));
+}
+
+poolQuery();
 
 module.exports = {
-    GetUserList: GetUserList
+    handleConnection,
 }
+
+// prepare statement 사용 
