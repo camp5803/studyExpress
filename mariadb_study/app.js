@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const connDB = require('./lib/mariadb');
+const userHandler = require('./lib/userhandler');
 const fs = require('fs');
+const { poolQuery } = require('./lib/mariadb');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -15,11 +16,19 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    const errStatus = false;
+    res.render('login', { err: errStatus });
 });
 
 app.post('/login', (req, res) => {
+    const user = {
+        info: req.body,
+        error: false,
+    };
 
+    userHandler.login(user);
+
+    res.render('login', { err: user.error });
 });
 
 app.post('/logout', (req, res) => {
@@ -27,10 +36,32 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/signup', (req, res) => {
-    res.render('signup');
+    const pwErr = false;
+    res.render('signup', { pwErr });
+});
+
+app.post('/signup', (req, res) => {
+    const user = {
+        info: req.body,
+        key: new Array(),
+        value: new Array(),
+        error: false,
+    };
+
+    if(user.info.passwd != user.info.repasswd) {
+        user.pwErr = true;
+        res.render('signup', { pwErr: user.pwErr });
+        return;
+    }
+    delete user.info.repasswd;
+
+    userHandler.signup(user);
+
+    res.redirect('/')
 });
 
 app.get('/post', (req, res) => {
+
 });
 
 app.get('/post/private', (req, res) => {
@@ -51,17 +82,13 @@ app.get('/armycalc', (req, res) => {
 
 // test page for crud
 app.get('/test', (req, res) => {
-    fs.readFile('views/test.ejs', 'utf8', (err, data) => {
-        try {
-            connDB.query('SELECT * FROM user_basic;', (results) => { //connDB.query err
-                res.send(ejs.render(data, {
-                    data: results
-                }));
-            })
-        } catch (err) {
-            console.log(err);
-        }
-    });
+    const testQuery = poolQuery('SELECT * FROM user_basic where id=1');
+
+    testQuery.then((data) => {
+        res.render('test', { data });
+    }).catch((err) => {
+        console.error(err);
+    })
 });
 
 app.get('*', (req, res) => {

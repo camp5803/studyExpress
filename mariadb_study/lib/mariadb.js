@@ -15,15 +15,19 @@ const handleConnection = async (data) => {
     */
 }
 
-const poolQuery = async (data) => {
+const poolQuery = async (query, data) => {
     let poolConnection = await poolConnect();
-    console.log(await poolConnection.query('DESC user_basic'));
+    try { 
+        let kk = await poolConnection.query(query, data);
+        return kk[0];
+    } catch {
+        throw 'Warning: Threat of SQLi or Syntax Error';
+    }
 }
 
-poolQuery();
-
 module.exports = {
-    handleConnection,
+    poolQuery,
 }
 
 // prepare statement 사용 
+
