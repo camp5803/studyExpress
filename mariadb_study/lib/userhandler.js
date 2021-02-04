@@ -11,13 +11,20 @@ const signup = (data) => {
 };
 
 const login = (data) => {
-    const id_info = db.poolQuery('SELECT * FROM user_basic where id = ?', data.email);
-    
+    const id_info = db.poolQuery('SELECT * FROM user_basic where email = (?)', [data.info.email]);
+    console.log(data.info.email);
+    console.log(data.info.passwd);
+
     id_info.then((info) => {
-        if(info.passwd == null) {
-            throw 'LoginError';
-        } 
-    })
+        console.log(info);
+        if(data.info.passwd == info.passwd) {
+            console.log('로그인 성공');
+        } else {
+            console.log('시1발로그인실패');
+        }
+    }).catch(err => {
+        console.error(err);
+    });
 }                                       
 
 module.exports = {

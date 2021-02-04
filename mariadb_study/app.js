@@ -25,6 +25,7 @@ app.post('/login', (req, res) => {
         info: req.body,
         error: false,
     };
+    console.log(user);
 
     userHandler.login(user);
 
